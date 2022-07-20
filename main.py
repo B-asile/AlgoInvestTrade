@@ -26,16 +26,17 @@ def transform_csv_to_obj():
             #print(new_action.__dict__)
 
 def search_combinaison(list_actions):
-    totalCombinaison = []
+    totalCombination = []
     for i in range(len(list_actions)):
-        combinaison = itertools.combinations(list_actions, i)
-        for combo in combinaison:
-            totalCombinaison.append(combo)
+        combination = itertools.combinations(list_actions, i)
+        for combo in combination:
+            totalCombination.append(combo)
             print(combo)
-    return totalCombinaison
+    return totalCombination
 
 
 if __name__ == '__main__':
 
     transform_csv_to_obj()
     search_combinaison(list_actions)
+# + condition max 500euros
