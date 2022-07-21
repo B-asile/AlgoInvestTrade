@@ -1,7 +1,6 @@
 import csv
 import itertools
 
-list_actions = []
 
 class Action:
     def __init__(self, action_name, action_price, action_profit, action_benefit):
@@ -11,6 +10,7 @@ class Action:
         self.action_benefit = action_benefit
 
 def transform_csv_to_obj():
+    list_actions = []
     with open('actions.csv') as file:
         obj_csv = csv.reader(file, delimiter=',')
         next(obj_csv)
@@ -22,21 +22,47 @@ def transform_csv_to_obj():
 
             new_action = Action(action_name, action_price, action_profit, action_benefit)
             list_actions.append(new_action)
+    return list_actions
 
             #print(new_action.__dict__)
 
-def search_combinaison(list_actions):
+def search_combination(list_actions):
     totalCombination = []
     for i in range(len(list_actions)):
         combination = itertools.combinations(list_actions, i)
         for combo in combination:
             totalCombination.append(combo)
-            print(combo)
+            # print(combo)
     return totalCombination
 
+def combinations_investment500(eachCombination):
+    investment500 = []
+    for eachList in eachCombination:
+        globalCost = 0
+        for eachAction in eachList:
+            globalCost = int(globalCost) + int(eachAction.action_price)
+        if int(globalCost) <= 500:
+            investment500.append(eachList)
+            #print(eachList)
+        else: pass
+    return investment500
+
+def select_best_profit(selectInvestment):
+    bestBenefitAction = []
+    for eachInvestment in selectInvestment:
+        bestBenefit = 0
+        #print(eachInvestment)
+        for actions in eachInvestment:
+            bestBenefit = int(bestBenefit) + int(actions.action_benefit)
+        if bestBenefit > 0:
+            bestBenefitAction.append(max(bestBenefit))
+        else: pass
+    print(bestBenefitAction)
 
 if __name__ == '__main__':
 
-    transform_csv_to_obj()
-    search_combinaison(list_actions)
-# + condition max 500euros
+    list_actions = transform_csv_to_obj()
+    totalCombination = search_combination(list_actions)
+    #combinations_investment500(totalCombination)
+    investment500 = combinations_investment500(totalCombination)
+    select_best_profit(investment500)
