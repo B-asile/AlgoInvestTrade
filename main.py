@@ -18,7 +18,7 @@ def transform_csv_to_obj():
             action_name = action[0]
             action_price = action[1]
             action_profit = action[2]
-            action_benefit = int(action_price)*int(action_profit)/100
+            action_benefit = float(action_price) * float(action_profit) / 100
 
             new_action = Action(action_name, action_price, action_profit, action_benefit)
             list_actions.append(new_action)
@@ -40,7 +40,7 @@ def combinations_investment500(eachCombination):
     for eachList in eachCombination:
         globalCost = 0
         for eachAction in eachList:
-            globalCost = int(globalCost) + int(eachAction.action_price)
+            globalCost = float(globalCost) + float(eachAction.action_price)
         if int(globalCost) <= 500:
             investment500.append(eachList)
             #print(eachList)
@@ -48,16 +48,23 @@ def combinations_investment500(eachCombination):
     return investment500
 
 def select_best_profit(selectInvestment):
-    bestBenefitAction = []
+    bestBenefit = 0
+    bestList = []
     for eachInvestment in selectInvestment:
-        bestBenefit = 0
         #print(eachInvestment)
+        curentBenefit = 0
         for actions in eachInvestment:
-            bestBenefit = int(bestBenefit) + int(actions.action_benefit)
-        if bestBenefit > 0:
-            bestBenefitAction.append(max(bestBenefit))
-        else: pass
-    print(bestBenefitAction)
+            curentBenefit = float(curentBenefit) + float(actions.action_benefit)
+            if curentBenefit > bestBenefit:
+                bestBenefit = curentBenefit
+                print(bestBenefit)
+                for obj in eachInvestment:
+                    print(obj.__dict__)
+            else: pass
+
+        #for bestBenefit in eachInvestment:
+
+
 
 if __name__ == '__main__':
 
