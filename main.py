@@ -1,6 +1,10 @@
 import csv
 import itertools
+import time
 
+# start_time = time.time()
+# interval =time.time() - start_time
+# print("timing : ", interval)
 
 class Action:
     def __init__(self, action_name, action_price, action_profit, action_benefit):
@@ -49,27 +53,30 @@ def combinations_investment500(eachCombination):
 
 def select_best_profit(selectInvestment):
     bestBenefit = 0
-    bestList = []
+    bestList = 0
     for eachInvestment in selectInvestment:
-        #print(eachInvestment)
         curentBenefit = 0
         for actions in eachInvestment:
             curentBenefit = float(curentBenefit) + float(actions.action_benefit)
             if curentBenefit > bestBenefit:
                 bestBenefit = curentBenefit
-                print(bestBenefit)
-                for obj in eachInvestment:
-                    print(obj.__dict__)
+                bestList = eachInvestment
             else: pass
-
-        #for bestBenefit in eachInvestment:
+    print(f"le meilleur rendement en terme de benefice est de :{bestBenefit}euros ")
+    print(f"lot d'actions :")
+    for i in bestList:
+        print(i.__dict__)
+    return bestBenefit, bestList
 
 
 
 if __name__ == '__main__':
 
+
+    start_time = time.time()
     list_actions = transform_csv_to_obj()
     totalCombination = search_combination(list_actions)
     #combinations_investment500(totalCombination)
     investment500 = combinations_investment500(totalCombination)
     select_best_profit(investment500)
+    print("--- %s secondes ---" % (time.time() - start_time))
