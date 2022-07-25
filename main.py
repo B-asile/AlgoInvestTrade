@@ -62,8 +62,8 @@ def select_best_profit(selectInvestment):
                 bestBenefit = curentBenefit
                 bestList = eachInvestment
             else: pass
-    print(f"le meilleur rendement en terme de benefice est de :{bestBenefit}euros ")
-    print(f"lot d'actions :")
+    print(f"la combinaison d'action avec le meilleur rendement en terme de benefice est de :{bestBenefit} euros ")
+    print(f"________lot d'actions_______")
     for i in bestList:
         print(i.__dict__)
     return bestBenefit, bestList
