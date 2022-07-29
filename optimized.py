@@ -31,23 +31,19 @@ def optimized_investment(max_invest, list_actions):
 
     for i in range(1, len(list_actions) + 1):
         for w in range(1, max_invest + 1):
-            print(list_actions[i-1].action_price)
-            if list_actions[i-1].action_price[1] <= w:
-                matrice[i][w] = max(list_actions[i-1][2] + matrice[i-1][w-list_actions[i-1][1]], matrice[i-1][w])
-                print("if")
+            if int(list_actions[i-1].action_price) <= w:
+                matrice[i][w] = max(int(list_actions[i-1].action_benefit) + matrice[i-1][w- int(list_actions[i-1].action_price)], matrice[i-1][w])
             else:
                 matrice[i][w] = matrice[i-1][w]
-                print("else")
 
     w = max_invest
     n = len(list_actions)
     elements_selection = []
 
     while w >= 0 and n >= 0:
-        e = list_actions[n-1]
-        if matrice[n][w] == matrice[n-1][w-e[1]] + e[2]:
-            elements_selection.append(e)
-            w -= e[1]
+        if matrice[n][w] == matrice[n-1][w- int(list_actions[n-1].action_price)] + int(list_actions[n-1].action_benefit):
+            elements_selection.append(list_actions[n-1])
+            w -= int(list_actions[n-1].action_price)
 
         n -= 1
     return matrice[-1][-1], elements_selection
