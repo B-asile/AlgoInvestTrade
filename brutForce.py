@@ -2,9 +2,6 @@ import csv
 import itertools
 import time
 
-# start_time = time.time()
-# interval =time.time() - start_time
-# print("timing : ", interval)
 
 class Action:
     def __init__(self, action_name, action_price, action_profit, action_benefit):
@@ -12,6 +9,7 @@ class Action:
         self.action_price = action_price
         self.action_profit = action_profit
         self.action_benefit = action_benefit
+
 
 def transform_csv_to_obj():
     list_actions = []
@@ -28,7 +26,6 @@ def transform_csv_to_obj():
             list_actions.append(new_action)
     return list_actions
 
-            #print(new_action.__dict__)
 
 def search_combination(list_actions):
     totalCombination = []
@@ -39,17 +36,18 @@ def search_combination(list_actions):
             # print(combo)
     return totalCombination
 
+
 def combinations_investment500(eachCombination):
     investment500 = []
     for eachList in eachCombination:
         globalCost = 0
         for eachAction in eachList:
             globalCost = float(globalCost) + float(eachAction.action_price)
-        if int(globalCost) <= 500:
+        if float(globalCost) <= 500:
             investment500.append(eachList)
-            #print(eachList)
         else: pass
     return investment500
+
 
 def select_best_profit(selectInvestment):
     bestBenefit = 0
@@ -62,21 +60,18 @@ def select_best_profit(selectInvestment):
                 bestBenefit = curentBenefit
                 bestList = eachInvestment
             else: pass
-    print(f"la combinaison d'action avec le meilleur rendement en terme de benefice est de :{bestBenefit} euros ")
+    print(f"la combinaison d'actions avec le meilleur rendement en terme de benefice est de :{bestBenefit} euros ")
     print(f"________lot d'actions_______")
     for i in bestList:
         print(i.__dict__)
     return bestBenefit, bestList
 
 
-
 if __name__ == '__main__':
-
 
     start_time = time.time()
     list_actions = transform_csv_to_obj()
     totalCombination = search_combination(list_actions)
-    #combinations_investment500(totalCombination)
     investment500 = combinations_investment500(totalCombination)
     select_best_profit(investment500)
     print("--- %s secondes ---" % (time.time() - start_time))
