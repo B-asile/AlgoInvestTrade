@@ -2,40 +2,73 @@ import csv
 import time
 
 
-max_invest = 500
+#max_invest = 0
 
 
-class Action:
-    def __init__(self, action_name, action_price, action_profit, action_benefit):
-        self.action_name = action_name
-        self.action_price = action_price
-        self.action_profit = action_profit
-        self.action_benefit = action_benefit
+def file_choice():
+    print("choisissez un fichier à analyser :\n"
+          "1 - pour actions.csv\n"
+          "2 - pour dataset1_Python+P7.csv\n"
+          "3 - pour dataset1_Python+P7.csv\n"
+          )
+    input_choice = input("saisissez le N° correspondant au fichier de votre choix:")
+    if input_choice == "1" or input_choice == "2" or input_choice == "3":
+        return input_choice
+    else:
+        print("saisie incorrect")
+        return file_choice()
 
 
-def transform_csv_to_obj():
+# class Action:
+#     def __init__(self, action_name, action_price, action_profit, action_benefit):
+#         self.action_name = action_name
+#         self.action_price = action_price
+#         self.action_profit = action_profit
+#         self.action_benefit = action_benefit
+
+
+def transform_csv_to_obj(choice):
     list_actions = []
-    with open('actions.csv') as file:
-        obj_csv = csv.reader(file, delimiter=',')
-        next(obj_csv)
-        for action in obj_csv:
-            action_name = action[0]
-            action_price = action[1]
-            action_profit = action[2]
-            action_benefit = int(action_price) * int(action_profit)
+    # max_invest = 0
 
-            new_action = Action(action_name, action_price, action_profit, action_benefit)
-            list_actions.append(new_action)
-    return list_actions
+    if choice == "1":
+        with open('actions.csv') as file:
+            obj_csv = csv.DictReader(file, delimiter=',')
+            # next(obj_csv)
+            for row in obj_csv:
+                # action = (row["action_name"], int(row["action_price"]), int(row["action_profit"]))
+                action = (row["name"], int(row["price"]), int(row["profit"]))
+                list_actions.append(action)
+                # benefit = (int(row["price"]) * int(row["profit"]))
+                benefit = int(list_actions[1]) * int(list_actions[2])
+                list_actions.append(benefit)
+                print(list_actions)
+            max_invest = 500
+    else:
+        if choice == "2":
+            with open('dataset1_Python+P7.csv') as file:
+                obj_csv = csv.reader(file, delimiter=',')
+                next(obj_csv)
+        elif choice == "3":
+            with open('dataset2_Python+P7.csv') as file:
+                obj_csv = csv.reader(file, delimiter=',')
+                next(obj_csv)
+                for row in obj_csv:
+                    # if not '-' in row:
+                    if (float(row[1])) > 0 and (float(row[2])) > 0:
+                        max_invest = 50000
+    return list_actions, max_invest
 
 
+# O(n^W)
 def optimized_investment(max_invest, list_actions):
     matrice = [[0 for x in range(max_invest + 1)] for x in range(len(list_actions) + 1)]
 
     for i in range(1, len(list_actions) + 1):
         for w in range(1, max_invest + 1):
             if int(list_actions[i-1].action_price) <= w:
-                matrice[i][w] = max(int(list_actions[i-1].action_benefit) + matrice[i-1]
+                matrice[i][w] = max((list_actions[i-1].action_benefit) + matrice[i-1]
+               # matrice[i][w] = max(int(list_actions[i - 1].action_benefit) + matrice[i - 1]
                 [w - int(list_actions[i-1].action_price)], matrice[i-1][w])
             else:
                 matrice[i][w] = matrice[i-1][w]
@@ -55,10 +88,12 @@ def optimized_investment(max_invest, list_actions):
 if __name__ == '__main__':
 
 
+    #choice = file_choice()
     start_time = time.time()
-    list_actions = transform_csv_to_obj()
+    list_actions, max_invest = transform_csv_to_obj(file_choice())
     optimized_investment(max_invest, list_actions)
     actions_selection = optimized_investment(max_invest, list_actions)
     print(actions_selection[0] / 100)
-    for x in actions_selection[1]: print(x.__dict__)
+    for x in actions_selection[1]:
+        print(x.__dict__)
     print("--- %s secondes ---" % (time.time() - start_time))
