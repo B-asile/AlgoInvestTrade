@@ -6,17 +6,15 @@ import time
 
 
 def file_choice():
-    print("choisissez un fichier à analyser :\n"
-          "1 - pour actions.csv\n"
-          "2 - pour dataset1_Python+P7.csv\n"
-          "3 - pour dataset1_Python+P7.csv\n"
-          )
-    input_choice = input("saisissez le N° correspondant au fichier de votre choix:")
-    if input_choice == "1" or input_choice == "2" or input_choice == "3":
-        return input_choice
-    else:
+    while True:
+        print("choisissez un fichier à analyser :\n"
+                "1 - pour actions.csv\n"
+                "2 - pour dataset1_Python+P7.csv\n"
+                "3 - pour dataset1_Python+P7.csv\n")
+        user_select = input("saisissez le N° correspondant au fichier de votre choix:")
+        if user_select == "1" or user_select == "2" or user_select == "3":
+            return user_select
         print("saisie incorrect")
-        return file_choice()
 
 
 # class Action:
@@ -40,7 +38,7 @@ def transform_csv_to_obj(choice):
                 action = (row["name"], int(row["price"]), int(row["profit"]))
                 list_actions.append(action)
                 # benefit = (int(row["price"]) * int(row["profit"]))
-                benefit = int(list_actions[1]) * int(list_actions[2])
+                benefit = int(list_actions.price) * int(list_actions.profit)
                 list_actions.append(benefit)
                 print(list_actions)
             max_invest = 500
