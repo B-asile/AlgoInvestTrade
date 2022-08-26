@@ -12,7 +12,7 @@ def file_choice():
           "3 - pour dataset1_Python+P7.csv\n")
     while True:
         user_select = input("saisissez le N° correspondant au fichier de votre choix:")
-        if user_select == "1" or user_select == "2" or user_select == "3":
+        if user_select == "1" or user_select == "2" or user_select == "3" or user_select == "4":
             return user_select
         print("saisie incorrect")
 
@@ -42,7 +42,7 @@ def transform_csv(file):
             with open('dataset1_Python+P7.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
-                    if (float(row["price"])*10) > 0 and (float(row["profit"])*10) > 0:
+                    if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
                         action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10),
                         int(float(row["price"])*10) * int(float(row["profit"])*10))
                         list_actions.append(action)
@@ -50,15 +50,15 @@ def transform_csv(file):
                               #float(row["price"]) * float(row["profit"]))
                     #print(action)
                 max_invest = 500
-        elif file == "3":
-            with open('dataset2_Python+P7.csv') as file:
+        elif file == "4":
+            with open('teste.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
-                    action = (row["name"], int(row["price"]), int(row["profit"]), int(row["price"]) * int(row["profit"]))
-                    # if not '-' in row:
                     if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
+                        action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10), int(float(row["price"])*10) * int(float(row["profit"])*10))
+                    # if not '-' in row:
                         list_actions.append(action)
-                        max_invest = 50000
+                        max_invest = 500
     return list_actions, max_invest
 
 
@@ -86,11 +86,13 @@ def optimized_investment(max_invest, list_actions):
     n = len(list_actions)
     actions_selection = []
 
-    print("b  " + str(n))
-    print(str(w))
+    print("brr  " + str(n) + " " + str(w))
 
     while w >= 0 and n >= 0:
         #if matrice[n][w] == matrice[n-1][w - int(list_actions[n-1][1])] + int(list_actions[n-1][3]):
+        #print(str(len(matrice[n])))
+        #print("LA" + str(list_actions))
+
         if matrice[n][w] == matrice[n - 1][w - list_actions[n - 1][1]] + list_actions[n - 1][3]:
             actions_selection.append(list_actions[n-1])
             #w -= int(list_actions[n-1][1])
@@ -106,7 +108,7 @@ if __name__ == '__main__':
     start_time = time.time()
     optimized_investment(max_invest, list_actions)
     actions_selection = optimized_investment(max_invest, list_actions)
-    print(actions_selection[0] / 100)
+    print(actions_selection[0] / 1000)
     for x in actions_selection[1]:
         print(x)
     print("--- %s secondes ---" % (time.time() - start_time))
