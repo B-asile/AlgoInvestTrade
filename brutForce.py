@@ -27,6 +27,7 @@ def transform_csv_to_obj():
     return list_actions
 
 
+# O(2^N)
 def search_combination(list_actions):
     totalCombination = []
     for i in range(len(list_actions)):
