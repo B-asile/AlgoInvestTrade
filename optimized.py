@@ -46,19 +46,16 @@ def transform_csv(file):
                         action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10),
                         int(float(row["price"])*10) * int(float(row["profit"])*10))
                         list_actions.append(action)
-                    #action = (row["name"], float(row["price"]), float(row["profit"]),
-                              #float(row["price"]) * float(row["profit"]))
-                    #print(action)
-                max_invest = 500
-        elif file == "4":
-            with open('teste.csv') as file:
+                max_invest = 5000
+        elif file == "3":
+            with open('test.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
                     if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
                         action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10), int(float(row["price"])*10) * int(float(row["profit"])*10))
                     # if not '-' in row:
                         list_actions.append(action)
-                        max_invest = 500
+                        max_invest = 5000
     return list_actions, max_invest
 
 
@@ -86,12 +83,9 @@ def optimized_investment(max_invest, list_actions):
     n = len(list_actions)
     actions_selection = []
 
-    print("brr  " + str(n) + " " + str(w))
 
     while w >= 0 and n >= 0:
         #if matrice[n][w] == matrice[n-1][w - int(list_actions[n-1][1])] + int(list_actions[n-1][3]):
-        #print(str(len(matrice[n])))
-        #print("LA" + str(list_actions))
 
         if matrice[n][w] == matrice[n - 1][w - list_actions[n - 1][1]] + list_actions[n - 1][3]:
             actions_selection.append(list_actions[n-1])
