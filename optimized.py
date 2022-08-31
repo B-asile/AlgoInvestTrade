@@ -12,22 +12,13 @@ def file_choice():
           "3 - pour dataset1_Python+P7.csv\n")
     while True:
         user_select = input("saisissez le N° correspondant au fichier de votre choix:")
-        if user_select == "1" or user_select == "2" or user_select == "3" or user_select == "4":
+        if user_select == "1" or user_select == "2" or user_select == "3":
             return user_select
         print("saisie incorrect")
 
 
-# class Action:
-#     def __init__(self, action_name, action_price, action_profit, action_benefit):
-#         self.action_name = action_name
-#         self.action_price = action_price
-#         self.action_profit = action_profit
-#         self.action_benefit = action_benefit
-
-
 def transform_csv(file):
     list_actions = []
-    # max_invest = 0
 
     if file == "1":
         with open('actions.csv') as file:
@@ -39,6 +30,7 @@ def transform_csv(file):
             max_invest = 500
     else:
         if file == "2":
+            #obj_csv = csv.DictReader(file, delimiter=',')
             with open('dataset1_Python+P7.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
@@ -48,12 +40,11 @@ def transform_csv(file):
                         list_actions.append(action)
                 max_invest = 5000
         elif file == "3":
-            with open('test.csv') as file:
+            with open('dataset2_Python+P7.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
                     if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
                         action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10), int(float(row["price"])*10) * int(float(row["profit"])*10))
-                    # if not '-' in row:
                         list_actions.append(action)
                         max_invest = 5000
     return list_actions, max_invest
@@ -66,11 +57,6 @@ def optimized_investment(max_invest, list_actions):
         for w in range(1, max_invest + 1):
             #if int(list_actions[i-1][1]) <= w:
             if list_actions[i - 1][1] <= w:
-                #print(str(i) +" " + str(w))
-                #print(str(len(matrice[i])))
-                #print(str(len(matrice)))
-                #print(str(list_actions[i-1][1]))
-                #print("")
 
                 matrice[i][w] = max((list_actions[i-1][3]) + matrice[i-1]
                # matrice[i][w] = max(int(list_actions[i - 1].action_benefit) + matrice[i - 1]
@@ -92,17 +78,32 @@ def optimized_investment(max_invest, list_actions):
             #w -= int(list_actions[n-1][1])
             w -= list_actions[n - 1][1]
         n -= 1
-    return matrice[-1][-1], actions_selection
+
+    share_packages_price = sum([list_actions[1] for list_actions in actions_selection])
+
+    return matrice[-1][-1], actions_selection, share_packages_price
 
 
 if __name__ == '__main__':
 
 
-    list_actions, max_invest = transform_csv(file_choice())
+    user_choice = file_choice()
+    list_actions, max_invest = transform_csv(user_choice)
     start_time = time.time()
-    optimized_investment(max_invest, list_actions)
-    actions_selection = optimized_investment(max_invest, list_actions)
-    print(actions_selection[0] / 1000)
-    for x in actions_selection[1]:
-        print(x)
+    matrice, actions_selection, share_packages_price = optimized_investment(max_invest, list_actions)
+    if user_choice == "1":
+        print(f"pour un investissement de: {share_packages_price}")
+        print(f"Combinaison d'actions avec le meilleur rendement en terme de benefice est de: {matrice / 100}")
+        print(f"------lot d'actions-------")
+        for x in actions_selection:
+            print(x)
+        #print(actions_selection[0] / 100)
+        #for x in actions_selection[1]:
+            #print(x)
+    else:
+        print(f"pour un investissement de:{float(share_packages_price) / 10}")
+        print(f"Combinaison d'actions avec le meilleur rendement en terme de benefice est de: {matrice / 10000}")
+        print(f"------lot d'actions-------")
+        for x in actions_selection:
+            print(x[0], float(x[1]/10), float(x[2]/10), float(x[3]/10000))
     print("--- %s secondes ---" % (time.time() - start_time))
