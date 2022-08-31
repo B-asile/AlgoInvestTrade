@@ -2,9 +2,6 @@ import csv
 import time
 
 
-#max_invest = 0
-
-
 def file_choice():
     print("choisissez un fichier à analyser :\n"
           "1 - pour actions.csv\n"
@@ -23,14 +20,12 @@ def transform_csv(file):
     if file == "1":
         with open('actions.csv') as file:
             obj_csv = csv.DictReader(file, delimiter=',')
-            # next(obj_csv)
             for row in obj_csv:
                 action = (row["name"], int(row["price"]), int(row["profit"]), int(row["price"]) * int(row["profit"]))
                 list_actions.append(action)
             max_invest = 500
     else:
         if file == "2":
-            #obj_csv = csv.DictReader(file, delimiter=',')
             with open('dataset1_Python+P7.csv') as file:
                 obj_csv = csv.DictReader(file, delimiter=',')
                 for row in obj_csv:
@@ -55,12 +50,8 @@ def optimized_investment(max_invest, list_actions):
     matrice = [[0 for x in range(max_invest + 1)] for x in range(len(list_actions) + 1)]
     for i in range(1, len(list_actions) + 1):
         for w in range(1, max_invest + 1):
-            #if int(list_actions[i-1][1]) <= w:
             if list_actions[i - 1][1] <= w:
-
                 matrice[i][w] = max((list_actions[i-1][3]) + matrice[i-1]
-               # matrice[i][w] = max(int(list_actions[i - 1].action_benefit) + matrice[i - 1]
-                #[w - int(list_actions[i-1][1])], matrice[i-1][w])
                 [w - list_actions[i - 1][1]], matrice[i - 1][w])
             else:
                 matrice[i][w] = matrice[i-1][w]
@@ -71,11 +62,8 @@ def optimized_investment(max_invest, list_actions):
 
 
     while w >= 0 and n >= 0:
-        #if matrice[n][w] == matrice[n-1][w - int(list_actions[n-1][1])] + int(list_actions[n-1][3]):
-
         if matrice[n][w] == matrice[n - 1][w - list_actions[n - 1][1]] + list_actions[n - 1][3]:
             actions_selection.append(list_actions[n-1])
-            #w -= int(list_actions[n-1][1])
             w -= list_actions[n - 1][1]
         n -= 1
 
@@ -92,17 +80,14 @@ if __name__ == '__main__':
     start_time = time.time()
     matrice, actions_selection, share_packages_price = optimized_investment(max_invest, list_actions)
     if user_choice == "1":
-        print(f"pour un investissement de: {share_packages_price}")
-        print(f"Combinaison d'actions avec le meilleur rendement en terme de benefice est de: {matrice / 100}")
+        print(f"Pour un investissement de: {share_packages_price} euros ")
+        print(f"le meilleur rendement en terme de benefice est de: {matrice / 100}")
         print(f"------lot d'actions-------")
         for x in actions_selection:
             print(x)
-        #print(actions_selection[0] / 100)
-        #for x in actions_selection[1]:
-            #print(x)
     else:
-        print(f"pour un investissement de:{float(share_packages_price) / 10}")
-        print(f"Combinaison d'actions avec le meilleur rendement en terme de benefice est de: {matrice / 10000}")
+        print(f"Pour un investissement de:{float(share_packages_price) / 10}")
+        print(f"le meilleur rendement en terme de benefice est de: {matrice / 10000}")
         print(f"------lot d'actions-------")
         for x in actions_selection:
             print(x[0], float(x[1]/10), float(x[2]/10), float(x[3]/10000))
