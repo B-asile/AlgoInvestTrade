@@ -62,9 +62,8 @@ def select_best_profit(selectInvestment):
                 bestList = eachInvestment
             else: pass
     share_packages_price = sum([float(result.action_price) for result in bestList])
-    print(f"Combinaison d'actions avec le meilleur rendement en terme de benefice est de :{bestBenefit} euros\n"
-          "pour un investissement de :{share_packages_price} euros" )
-    print(f"pour un invest{share_packages_price}")
+    print(f"Le meilleur rendement en terme de benefice est de :{bestBenefit} euros")
+    print(f"pour un investissement de : {share_packages_price}")
     print(f"________lot d'actions_______")
     for i in bestList:
         print(i.__dict__)

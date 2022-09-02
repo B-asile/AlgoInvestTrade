@@ -9,39 +9,27 @@ def file_choice():
           "3 - pour dataset1_Python+P7.csv\n")
     while True:
         user_select = input("saisissez le N° correspondant au fichier de votre choix:")
-        if user_select == "1" or user_select == "2" or user_select == "3":
-            return user_select
-        print("saisie incorrect")
+        if user_select == "1":
+            return "actions.csv"
+        elif user_select == "2":
+            return "dataset1_Python+P7.csv"
+        elif user_select == "3":
+            return "dataset2_Python+P7.csv"
+        else:
+            print("saisie incorrect")
 
 
-def transform_csv(file):
+def transform_csv(file_name):
     list_actions = []
+    precision = 100
 
-    if file == "1":
-        with open('actions.csv') as file:
-            obj_csv = csv.DictReader(file, delimiter=',')
-            for row in obj_csv:
-                action = (row["name"], int(row["price"]), int(row["profit"]), int(row["price"]) * int(row["profit"]))
+    with open(file_name) as file:
+        obj_csv = csv.DictReader(file, delimiter=',')
+        for row in obj_csv:
+            if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
+                action = (row["name"], int(float(row["price"])*precision), int(float(row["profit"])*precision), int(float(row["price"])*precision) * int(float(row["profit"])*precision))
                 list_actions.append(action)
-            max_invest = 500
-    else:
-        if file == "2":
-            with open('dataset1_Python+P7.csv') as file:
-                obj_csv = csv.DictReader(file, delimiter=',')
-                for row in obj_csv:
-                    if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
-                        action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10),
-                        int(float(row["price"])*10) * int(float(row["profit"])*10))
-                        list_actions.append(action)
-                max_invest = 5000
-        elif file == "3":
-            with open('dataset2_Python+P7.csv') as file:
-                obj_csv = csv.DictReader(file, delimiter=',')
-                for row in obj_csv:
-                    if (float(row["price"])) > 0 and (float(row["profit"])) > 0:
-                        action = (row["name"], int(float(row["price"])*10), int(float(row["profit"])*10), int(float(row["price"])*10) * int(float(row["profit"])*10))
-                        list_actions.append(action)
-                        max_invest = 5000
+                max_invest = 500 * precision
     return list_actions, max_invest
 
 
@@ -79,16 +67,9 @@ if __name__ == '__main__':
     list_actions, max_invest = transform_csv(user_choice)
     start_time = time.time()
     matrice, actions_selection, share_packages_price = optimized_investment(max_invest, list_actions)
-    if user_choice == "1":
-        print(f"Pour un investissement de: {share_packages_price} euros ")
-        print(f"le meilleur rendement en terme de benefice est de: {matrice / 100}")
-        print(f"------lot d'actions-------")
-        for x in actions_selection:
-            print(x)
-    else:
-        print(f"Pour un investissement de:{float(share_packages_price) / 10}")
-        print(f"le meilleur rendement en terme de benefice est de: {matrice / 10000}")
-        print(f"------lot d'actions-------")
-        for x in actions_selection:
-            print(x[0], float(x[1]/10), float(x[2]/10), float(x[3]/10000))
+    print(f"le meilleur rendement en terme de benefice est de: {matrice / 10000}")
+    print(f"Pour un investissement de:{float(share_packages_price) / 10}")
+    print(f"------lot d'actions-------")
+    for x in actions_selection:
+        print(x[0], float(x[1]/100), float(x[2]/100), float(x[3]/100000))
     print("--- %s secondes ---" % (time.time() - start_time))
